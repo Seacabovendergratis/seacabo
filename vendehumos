@@ -1,0 +1,50 @@
+import streamlit as st
+
+# Configuración visual de la aplicación
+st.set_page_config(page_title="Cazador de Vendehumos", page_icon="🛑")
+st.title("🛑 Detector de Engaños Publicitarios")
+st.write("Copia el texto del anuncio sospechoso abajo para destapar su estrategia oculta y obtener tus réplicas de guerrilla.")
+
+# Base de datos de patrones de engaño y réplicas para Facebook
+BASE_DATOS = {
+    "riesgo cero": {
+        "alerta": "Las empresas de fondeo te cobran una matrícula cara por un examen que perderás si fallas.",
+        "replica": "Ojo: 'Riesgo cero' significa que pagas tú la inscripción del examen. El 95% suspende por las reglas imposibles de pérdida máxima diaria (drawdown). El negocio es cobrar la matrícula."
+    },
+    "sin arriesgar tu capital": {
+        "alerta": "El riesgo económico no es cero, se traslada por completo a las tasas de examen obligatorias.",
+        "replica": "Mucho cuidado con 'no arriesgar tu capital'. No inviertes en el mercado, pagas exámenes de evaluación. Las trampas matemáticas de pérdida diaria hacen que casi todos suspendan."
+    },
+    "appointment setting": {
+        "alerta": "Mezclan términos de moda para camuflar y vender academias tradicionales de trading de alto precio.",
+        "replica": "Mezclan 'Appointment Setting' (vender por chat) con trading para usar palabras de moda. Si su sistema fuera tan rentable operando, no gastarían fortunas en publicidad buscando alumnos."
+    },
+    "agendar una llamada": {
+        "alerta": "Es un embudo de ventas con comerciales agresivos (closers) entrenados para presionarte.",
+        "replica": "La llamada no es para asesorarte. Te atenderá un cerrador de ventas entrenado para presionarte psicológicamente y venderte un curso de miles de euros. Investiga antes de dar tu tarjeta."
+    }
+}
+
+# Caja de texto para que el usuario pegue el anuncio
+texto_anuncio = st.text_area("Pega aquí el texto del anuncio:", placeholder="Ejemplo: Descubre cómo operar los mercados sin arriesgar tu capital...")
+
+if st.button("🚨 Analizar Anuncio"):
+    if texto_anuncio:
+        texto_min = texto_anuncio.lower()
+        encontrado = False
+        
+        st.subheader("📊 Diagnóstico del Sistema:")
+        
+        for patron, datos in BASE_DATOS.items():
+            if patron in texto_min:
+                encontrado = True
+                # Mostrar alerta en rojo
+                st.error(f"⚠️ **Patrón Detectado ('{patron}'):** {datos['alerta']}")
+                # Cuadro con el comentario listo para copiar
+                st.info(f"📋 **Copia esta réplica para Facebook:**\n\n{datos['replica']}")
+                st.write("---")
+        
+        if not encontrado:
+            st.success("✅ No se detectaron palabras trampa exactas de la base de datos, pero mantente alerta si promete dinero rápido.")
+    else:
+        st.warning("Por favor, pega algún texto antes de analizar.")
